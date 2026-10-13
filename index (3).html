@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Les sons en français</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+       background:#FBF8F1;color:#1F1B12;font-family:Poppins,'Segoe UI',Roboto,Arial,sans-serif;font-size:20px;text-align:center;padding:16px}
+  .rond{width:48px;height:48px;border-radius:50%;border:5px solid #F6E7B8;border-top-color:#D4A017;animation:t 1s linear infinite}
+  @keyframes t{to{transform:rotate(360deg)}}
+  button{font:inherit;font-weight:600;background:#D4A017;border:0;border-radius:16px;padding:14px 24px}
+</style>
+</head>
+<body>
+<div class="rond" id="rond"></div>
+<p id="msg">Un moment…</p>
+<script>
+// Page d'entrée des élèves – Mr SANA – ISJJ
+// Elle charge l'appli depuis le moteur Google (qui lit la dernière version dans le Drive).
+// Ce fichier ne change jamais : les mises à jour se font dans le Drive.
+var API_URL = 'https://script.google.com/macros/s/AKfycbwpZu7eG1x8O-sj3XgSCYvbR8Fb2lQThLHb8zfyrOYzN7Q0GTQSZRWyKuOfh2UDVNDX/exec';
+
+function erreur(){
+  document.getElementById('rond').style.display = 'none';
+  document.getElementById('msg').innerHTML = 'Pas de connexion.<br><br><button onclick="location.reload()">Réessayer</button>';
+}
+fetch(API_URL + '?action=page', { credentials: 'omit' })
+  .then(function (r) { return r.json(); })
+  .then(function (d) {
+    if (!d || !d.html) { erreur(); return; }
+    document.open();
+    document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">' +
+      '<script>var API_URL = ' + JSON.stringify(API_URL) + ';<\/script></head><body>' +
+      d.html + '</body></html>');
+    document.close();
+  })
+  .catch(erreur);
+</script>
+</body>
+</html>
